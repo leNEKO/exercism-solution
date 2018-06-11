@@ -1,8 +1,8 @@
 <?php
-
 /*
-so much pain and shame here ... 5 failures / 24 tests
-i need to read other solutions
+My first attemp
+so much pain and shame here … 5 failures / 24 tests
+bad design, i need to read other solutions …
 */
 
 Class Game{

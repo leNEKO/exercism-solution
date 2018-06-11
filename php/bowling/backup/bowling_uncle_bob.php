@@ -1,5 +1,10 @@
 <?php
+/*
+oh well this is a copy of the implementation of Uncle Bob that figures in his ppt file
+http://butunclebob.com/ArticleS.UncleBob.TheBowlingGameKata
 
+Worse result than my first attempt
+*/
 class Game {
     public $rolls = [];
     public $currentRoll = 0;

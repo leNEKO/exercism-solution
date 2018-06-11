@@ -1,9 +1,11 @@
 <?php
-// YAY ! all test passed
+// YAY ! all test passed, take this Uncle Bob
 class Game{
+    # rolls history
     public $rolls = [];
     public $cur_roll = 0;
 
+    # frames history
     public $frames = [];
     public $cur_frame = 0;
 
@@ -12,12 +14,13 @@ class Game{
         $this->new_frame();
     }
 
+    // record a new frame
     function new_frame(){
         $this->cur_frame++;
         $frame = false;
         if($this->cur_frame < 10){
             $frame = new Frame($this);
-        }elseif($this->cur_frame == 10){
+        }elseif($this->cur_frame == 10){  # we need a specific set of rules for the 10th frame
             $frame = new TenthFrame($this);
         }
         if($frame){
@@ -25,17 +28,19 @@ class Game{
         }
     }
 
+    // record a new roll
     function roll(int $pins){
         if($pins < 0 || $pins > 10){
             throw new Exception("0 <= pins <= 10");
         }
-        // rolls history
+        // record rolls in common history
         $this->cur_roll++;
         $this->rolls[$this->cur_roll] = $pins;
-        //  current frame
+        // record roll in the current frame
         $this->frames[$this->cur_frame]->roll($pins);
     }
 
+    // sum of all frame scores
     function score(): int{
         $total = 0;
         foreach($this->frames as $k => $frame){
@@ -45,6 +50,11 @@ class Game{
     }
 }
 
+
+/*
+maybe something like trait would be more adequate for designing this,
+but i don't master this yet
+*/
 class CommonFrame{
     public $pins = 10;
     public $roll = 2;
@@ -54,24 +64,27 @@ class CommonFrame{
     protected $_parent;
 
     function __construct($parent){
-        $this->_parent = $parent;
+        $this->_parent = $parent; # so we could access to the common game data from the frame
     }
 
+    // record roll in frame
     function roll(int $pins){
         $this->pins -= $pins;
         if($this->pins < 0){
-            throw new Exception("ZEUS");
+            throw new Exception("someone is cheating ?");
         }
         $this->roll --;
         $this->score[$this->_parent->cur_roll] = $pins;
     }
 
+    // current frame score
     function score(){
         if($this->type === "UNFINISHED"){
-            throw new Exception("UNFINISHED");
+            throw new Exception("UNFINISHED"); # the unit tests don't want us to calculate an unfinished game
         }
     }
 }
+
 
 class Frame extends CommonFrame{
     function roll($pins){
@@ -94,6 +107,7 @@ class Frame extends CommonFrame{
         parent::score();
         $key = key($this->score);
 
+        # look ahead
         switch($this->type){
             case "STRIKE":
             case "SPARE":
