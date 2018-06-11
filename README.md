@@ -1,3 +1,4 @@
-# exercism solution
+# Exercism solution
 
-here my solutions for the exercism.io problems
+Here my solutions for the exercism.io problems
+<http://exercism.io/leNEKO>
