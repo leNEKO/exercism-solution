@@ -1,0 +1,6 @@
+[package]
+name = "bob"
+version = "1.2.0"
+
+[dependencies]
+serde_json = "1.0.19"
