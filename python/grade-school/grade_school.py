@@ -1,19 +1,20 @@
+from collections import defaultdict
+
+
 class School(object):
     def __init__(self, name):
         self.name = name
-        self.rooster = {}
-        for i in range(1, 9):
-            self.rooster.update({i: []})
+        # with a default dict instead of initializing empty sets
+        self.rooster = defaultdict(set)
 
     def grade(self, n):
-        return set(self.rooster[n])
+        return self.rooster[n]
 
     def add(self, student, n):
-        self.rooster[n].append(student)
+        self.rooster[n].add(student)
 
     def sort(self):
         return list(
-            (k, tuple(sorted(v)))  # that's some parenthesis
-            for k, v in self.rooster.items()
-            if v
+            (k, tuple(sorted(v)))  # acute parenthesism occuring here
+            for k, v in sorted(self.rooster.items())
         )

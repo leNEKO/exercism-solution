@@ -1,6 +1,6 @@
 import unittest
 
-from sieve import sieve
+from sieve import sieve, gen_primes
 
 
 # Tests adapted from `problem-specifications//canonical-data.json` @ v1.1.0
@@ -36,6 +36,9 @@ class SieveTest(unittest.TestCase):
                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
                 971, 977, 983, 991, 997
             ])
+
+    def test_perf_ram(self):
+        print(sieve(100), list(gen_primes(100)))
 
 
 if __name__ == '__main__':
