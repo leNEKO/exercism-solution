@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #  litteral translation of my php solution
 def numeral(number):
     system = {
@@ -24,3 +25,7 @@ def numeral(number):
             number -= val
 
     return roman
+=======
+def numeral(number):
+    pass
+>>>>>>> 5c4e5fe1434ee93824e05fb37c28789faf19f46c
