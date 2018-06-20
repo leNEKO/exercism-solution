@@ -1,4 +1,5 @@
 # Exercism solution
 
-Here my solutions for the exercism.io problems
+Mainly for sync between computers,
+and as it is nothing confidential, here my solutions to the exercism.io problems
 <http://exercism.io/leNEKO>
