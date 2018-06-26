@@ -1,100 +1,88 @@
 class Node {
   constructor(data) {
+    this.prev = null;
     this.data = data;
-    this.next = undefined;
+    this.next = null;
   }
 }
 
-// a singly linked list implementation, will try with doubly next
 class LinkedList {
   constructor() {
-    this.head = undefined;
+    this.head = null;
+    this.tail = null;
+    this.length = 0;
   }
 
   push(data) {
-    if (this.head === undefined) {
-      this.head = new Node(data);
-      return;
+    let node = new Node(data);
+    if (this.length > 0) {
+      node.prev = this.tail;
+      this.tail.next = node;
+    } else {
+      this.head = node;
     }
-
-    let current = this.head;
-    while (current.next !== undefined) {
-      current = current.next;
-    }
-    current.next = new Node(data);
+    this.length++;
+    this.tail = node;
   }
 
   pop() {
-    let current = this.head;
-    if (this.head.next === undefined) {
-      this.head = undefined;
-      return current.data;
+    let data = this.tail.data;
+    if (this.length > 1) {
+      this.tail = this.tail.prev;
+      this.tail.next = null;
+    } else {
+      this.tail = null;
     }
-
-    while (current.next.next !== undefined) {
-      current = current.next;
-    }
-    let end_node = current.next;
-    current.next = undefined;
-    return end_node.data;
+    this.length--;
+    return data;
   }
 
   unshift(data) {
-    let newHead = new Node(data);
-    newHead.next = this.head;
-    this.head = newHead;
+    let node = new Node(data);
+    if (this.length < 1) {
+      this.tail = node;
+    } else {
+      node.next = this.head;
+      this.head.prev = node;
+    }
+    this.length++;
+    this.head = node;
   }
 
   shift() {
-    let current = this.head;
-    this.head = current.next;
-    return current.data;
+    let data = this.head.data;
+    this.head = this.head.next;
+    this.length--;
+    return data;
   }
 
   count() {
-    if (this.head === undefined) {
-      return 0;
-    }
-    var i = 1;
-    let current = this.head;
-    while (current.next !== undefined) {
-      current = current.next;
-      i++;
-    }
-
-    return i;
+    return this.length;
   }
 
   delete(data) {
-    if (this.head === undefined) {
-      return;
-    }
-    if (this.head.data === data) {
-      this.shift();
-      return;
-    }
-
     let current = this.head;
-    while (current.next !== undefined) {
-      if (current.next.data === data) {
-        current.next = current.next.next;
+    for (var i = 0; i < this.length; i++) {
+      if (current.data === data) {
+        if (this.length == 1) {
+          this.head = this.tail = null;
+        } else {
+          current.prev.next = current.next;
+        }
+        this.length--;
         return;
       }
       current = current.next;
     }
-    current.next = new Node(data);
   }
 }
 
 module.exports = LinkedList;
 
 if (require.main === module) {
-  var node = new LinkedList();
   var list = new LinkedList();
-  list.push(10);
   list.push(20);
   list.push(10);
-  list.push(30);
   list.delete(10);
   console.log(list);
 }
