@@ -1,15 +1,3 @@
-//  Fisher–Yates shuffle
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
-}
-
 // configuration
 const padAlpha = 2;
 const padDigit = 3;
@@ -24,16 +12,24 @@ const digits = {
     vals: "0123456789"
 };
 
+const max = asciis.keys.length ** padAlpha * digits.keys.length ** padDigit;
+
 // generate all possible ids
 var ids = [];
-for (
-    let i = 0;
-    i < digits.keys.length ** padAlpha * digits.keys.length ** padDigit;
-    i++
-) {
+for (let i = 0; i < max; i++) {
     ids.push(i);
 }
 // then shuffle
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
 var shuffledIds = shuffle(ids);
 
 // python like divmod
@@ -42,12 +38,12 @@ function divmod(num, div) {
 }
 
 // convert decimal to int with custom base and symbols
-function decToWhatever(dec, pad, dict) {
+function decToWhatever(dec, pad, lut) {
     let conv = "";
-    for (c of parseInt(dec, 10).toString(dict.keys.length)) {
-        conv += dict.vals[dict.keys.indexOf(c)];
+    for (c of parseInt(dec, 10).toString(lut.keys.length)) {
+        conv += lut.vals[lut.keys.indexOf(c)];
     }
-    return conv.padStart(pad, dict.vals[0]);
+    return conv.padStart(pad, lut.vals[0]);
 }
 
 // convert decimal to custom format AADDD
@@ -65,7 +61,13 @@ class Robot {
 
     setName() {
         // pick next avalaible id
-        this.name = numToName(shuffledIds.pop());
+        let next = shuffledIds.pop();
+        if (next === undefined) {
+            throw new Error(
+                "Le trop de robots est l'ennemi du mieux de robots"
+            );
+        }
+        this.name = numToName(next);
     }
 
     getName() {
@@ -78,3 +80,12 @@ class Robot {
 }
 
 module.exports = Robot;
+
+if (require.main === module) {
+    const max = 26 ** 2 * 10 ** 3;
+    let usedNames = [];
+    for (let i = 0; i < max; i++) {
+        var newRobot = new Robot();
+        usedNames[newRobot.name] = true;
+    }
+}
