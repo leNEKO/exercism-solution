@@ -1,25 +1,28 @@
-class Cipher(object):
-    def __init__(self, key=None):
-        pass
+from string import ascii_lowercase as ASCII
+import random
 
-    def codec(str, dir=1):
+
+class Cipher:
+    def __init__(self, key: str=None):
+        if key is None:
+            key = "".join(random.choice(ASCII)
+                          for _ in range(128))  # a default random key
+        # check for invalid keys
+        elif key == '' or sum(not (c.isalpha() and c.islower()) for c in key):
+            raise ValueError("Bad key")
+        self.key = key
+
+    def codec(self, text: str, dir: int=1) -> str:
         encoded = ""
-        for i in range(0, len(str)):
-            c = str[i]
-            # str char
-            k = this.key[i % this.key.length]
-            // key char
-            var pos = parseInt(by_keys[c])
-            var offset = parseInt(by_keys[k])
-            var npos = mod(pos + offset * dir, alpha.length)
-            var nc = alpha[npos]
-            encoded += nc
-        }
+        for i, char in enumerate(text):
+            k = self.key[i % len(self.key)]  # key char
+            pos = ASCII.find(char)  # char position in ascii
+            offset = ASCII.find(k)  # key char position "
+            encoded += ASCII[(pos + offset * dir) % len(ASCII)]  # nu char
         return encoded
-    }
 
-    def encode(self, text):
-        pass
+    def encode(self, text: str) -> str:
+        return self.codec(text, 1)
 
-    def decode(self, text):
-        pass
+    def decode(self, text: str) -> str:
+        return self.codec(text, -1)
