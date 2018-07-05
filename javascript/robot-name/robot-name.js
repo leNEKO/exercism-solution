@@ -14,9 +14,6 @@ const digits = {
 
 const max = asciis.keys.length ** padAlpha * digits.keys.length ** padDigit;
 
-var test = parseInt(max, 2);
-console.log(test, max);
-
 // generate all possible ids
 var ids = [];
 for (let i = 0; i < max; i++) {
