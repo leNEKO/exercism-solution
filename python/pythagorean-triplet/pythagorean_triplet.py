@@ -42,6 +42,7 @@ def primitive_triplets(b):
         c = m ** 2 + n ** 2
         if not (is_even(a) and is_even(c)):
             triplet = [a, b, c]
+            return(triplet)
             triplet.sort()
             result.append(tuple(triplet))
 
@@ -65,3 +66,11 @@ def is_triplet(args):
     sorted_args = tuple(args_list)
     a, b, c = sorted_args
     return a ** 2 + b ** 2 == c ** 2
+
+
+def main():
+    print(primitive_triplets(26**2*10**3))
+
+
+if __name__ == '__main__':
+    main()
