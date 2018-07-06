@@ -95,8 +95,8 @@ mod tests {
         b.iter(|| o_nth(10001));
     }
 
-    #[bench]
-    fn bench_slow_nth(b: &mut Bencher) {
-        b.iter(|| slow_nth(10001));
-    }
+    // #[bench]
+    // fn bench_slow_nth(b: &mut Bencher) {
+    //     b.iter(|| slow_nth(10001));
+    // }
 }
