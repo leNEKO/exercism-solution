@@ -17,23 +17,24 @@ class Phone(object):
             country_code = 1
         if int(country_code) != 1:
             raise ValueError(
-                f"Country code ({country_code}) must be 1 or nothing"
-            )
+                f"Country code ({country_code}) must be 1 or empty")
 
-        # the plain number
+        # store the plain number
         self.number = n = clean[-10::]
 
-        # check for area code
+        # check, store area code
         self.area_code = ac = n[0:3]
         if int(ac[0]) in [0, 1]:
             raise ValueError(f"Area code ({ac}) can't start with 0 or 1")
 
-        # check for exchange_code
+        # check, store exchange code
         self.exchange_code = ec = n[3:6]
         if int(ec[0]) in [0, 1]:
             raise ValueError(f"Exchange code ({ec}) can't start with 0 or 1")
 
+        # store the station code
+        self.station_code = n[6::]
+
     def pretty(self):
         # format (###) ###-####
-        n = self.number
-        return f"({n[0:3]}) {n[3:6]}-{n[6::]}"
+        return f"({self.area_code}) {self.exchange_code}-{self.station_code}"
