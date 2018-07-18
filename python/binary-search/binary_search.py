@@ -1,31 +1,23 @@
-def binary_search(l, n):
-    ll = len(l)  # list length
-    h = ll // 2  # half length
-    o = h  # offset
-
-    if l == []:
+def binary_search(num_list, num):
+    # num_list can't be empty
+    if num_list == []:
         raise ValueError("Empty array")
 
-    if (l[0] <= n <= l[-1]) == False:
-        raise ValueError("Out of bound")
+    # init slice
+    start = 0
+    end = len(num_list)
 
     while True:
-        print(f"search {n} at {o} found {l[o]}")
-        if l[o] == n:
-            print("WIN!")
-            return o
-        h //= 2
-        o += h if l[o] <= n else -h
-        print(f"next offset {o}")
-        if h == 0:
-            raise ValueError("Not Found")
+        half = (end - start) // 2
+        middle = start + half  # middle of the slice
 
+        if num_list[middle] == num:
+            return middle  # yay found it
+        elif start == middle:
+            raise ValueError(f"{num} Not in list")  # value not in list
 
-def main():
-    print(
-        binary_search([1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377], 21)
-    )
-
-
-if __name__ == '__main__':
-    main()
+        # stretch the slice
+        if num_list[middle] < num:
+            start = middle  # new slice start
+        else:
+            end = middle  # new slice end
