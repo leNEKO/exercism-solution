@@ -21,23 +21,9 @@ def score(dice, category):
     simple_cat = ["ones", "twos", "threes", "fours", "fives", "sixes", ]
 
     myscore = defaultdict(int)
-    # myscore = {
-    #     "yacht": 0,
-    #     "ones": 0,
-    #     "twos": 0,
-    #     "threes": 0,
-    #     "fours": 0,
-    #     "fives": 0,
-    #     "sixes": 0,
-    #     "full_house": 0,
-    #     "four_of_a_kind": 0,
-    #     "little_straight": 0,
-    #     "big_straight": 0,
-    #     "choice": 0,
-    # }
+    counter = defaultdict(int)
 
     dice = sorted(dice)
-    counter = defaultdict(int)
     for val in dice:
         counter[val] += 1
 
@@ -45,7 +31,7 @@ def score(dice, category):
     myscore["choice"] = sum(dice)
 
     # full house
-    if 3 in counter.values() and 2 in counter.values():
+    if all(v in counter.values() for v in (2, 3)):
         myscore["full_house"] = sum(dice)
 
     # straights
@@ -54,7 +40,7 @@ def score(dice, category):
     if dice == [2, 3, 4, 5, 6]:
         myscore["big_straight"] = 30
 
-    # 4 of a kind, Yathces
+    # 4 of a kind, Yatches
     for k, qty in counter.items():
         varname = simple_cat[k-1]
         myscore[varname] = k * qty

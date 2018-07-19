@@ -16,7 +16,7 @@ def binary_search(num_list, num):
         elif start == middle:
             raise ValueError(f"{num} Not in list")  # value not in list
 
-        # stretch the slice
+        # shrink
         if num_list[middle] < num:
             start = middle  # new slice start
         else:
