@@ -1,11 +1,7 @@
 class Garden(object):
-    PLANTS = {
-        "R": "Radishes",
-        "V": "Violets",
-        "C": "Clover",
-        "G": "Grass",
-    }
-    DEFAULT_STUDENTS = "Alice Bob Charlie David Eve Fred Ginny Harriet Ileana Joseph Kincaid Larry".split()
+    DEFAULT_STUDENTS = ("Alice Bob Charlie David Eve Fred Ginny "
+                        "Harriet Ileana Joseph Kincaid Larry").split()
+    PLANTS = {p[0]: p for p in "Radishes Violets Clover Grass".split()}
 
     def __init__(self, diagram, students=DEFAULT_STUDENTS):
         students = sorted(students)

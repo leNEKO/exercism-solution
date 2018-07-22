@@ -6,7 +6,6 @@ SYMBOLS = {
 
 
 def is_paired(input_string):
-    print(input_string)
     r = []
 
     for c in input_string:
