@@ -41,10 +41,6 @@ class SaddlePointsTest(unittest.TestCase):
         with self.assertRaisesWithMessage(ValueError):
             saddle_points(matrix)
 
-    def test_non_square(self):
-        matrix = [[3, 1, 3], [3, 2, 4]]
-        self.assertEqual(saddle_points(matrix), set([(0, 2), (0, 0)]))
-
     # Utility functions
     def setUp(self):
         try:

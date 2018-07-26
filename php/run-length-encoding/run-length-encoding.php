@@ -1,15 +1,15 @@
 <?php
-function encode($input)
+function encode($input): string
 {
     $encoded = "";
-    if($input){
+    if ($input) {
         $last_char = "";
         $counter = 1;
-        foreach(str_split($input) as $char){
-            if($char === $last_char){
+        foreach (str_split($input) as $char) {
+            if ($char === $last_char) {
                 $counter++;
-            }elseif($last_char !== ""){
-                if($counter > 1){
+            } elseif ($last_char !== "") {
+                if ($counter > 1) {
                     $encoded .= $counter;
                 }
                 $encoded .= $last_char;
@@ -17,7 +17,7 @@ function encode($input)
             }
             $last_char = $char;
         }
-        if($counter > 1){
+        if ($counter > 1) {
             $encoded .= $counter;
         }
         $encoded .= $last_char;
@@ -30,14 +30,14 @@ function decode($input): string
     $decoded = "";
     $digit = "";
 
-    foreach(str_split($input) as $char){
-        if((int)$char){
+    foreach (str_split($input) as $char) {
+        if ((int) $char) {
             $digit .= $char;
-        }else{
-            if(!$digit){
+        } else {
+            if (!$digit) {
                 $digit = "1";
             }
-            $qte = (int)$digit;
+            $qte = (int) $digit;
             $digit = "";
             $decoded .= str_repeat($char, $qte);
         }

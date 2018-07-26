@@ -4,6 +4,11 @@ require "change.php";
 
 class ChangeTest extends PHPUnit\Framework\TestCase
 {
+    public static function markTestSkipped(string $message = '')
+    {
+        return true;
+    }
+
     public function testSingleCoinChange()
     {
         $this->assertEquals(array(25), findFewestCoins(array(1, 5, 10, 25, 100), 25));
