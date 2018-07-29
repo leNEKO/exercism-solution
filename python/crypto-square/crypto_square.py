@@ -8,7 +8,6 @@ def encode(plain_text):
     if flat == "":  # if empty
         return ""
 
-    # indeed there is better way :)
     size = len(flat)
     sq = math.ceil(size ** .5)
     c = sq
