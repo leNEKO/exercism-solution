@@ -4,11 +4,6 @@ require "change.php";
 
 class ChangeTest extends PHPUnit\Framework\TestCase
 {
-    public static function markTestSkipped(string $message = '')
-    {
-        return true;
-    }
-
     public function testSingleCoinChange()
     {
         $this->assertEquals(array(25), findFewestCoins(array(1, 5, 10, 25, 100), 25));
@@ -61,9 +56,10 @@ class ChangeTest extends PHPUnit\Framework\TestCase
         findFewestCoins(array(1, 2, 5), -5);
     }
 
+    # Python track addon tests
     public function testPossibleChangeWithoutUnitCoinsAvailable()
     {
-        // $this->markTestSkipped();
+        $this->markTestSkipped();
         $this->assertEquals(
             array(2, 2, 2, 5, 10),
             findFewestCoins(array(2, 5, 10, 20, 50), 21)
@@ -72,10 +68,20 @@ class ChangeTest extends PHPUnit\Framework\TestCase
 
     public function testAnotherPossibleChangeWithoutUnitCoinsAvailable()
     {
-        // $this->markTestSkipped();
+        $this->markTestSkipped();
         $this->assertEquals(
             array(4, 4, 4, 5, 5, 5),
             findFewestCoins(array(4, 5), 27)
+        );
+    }
+
+    # 4d47 addon test
+    public function testWithMultileLower()
+    {
+        $this->markTestSkipped();
+        $this->assertEquals(
+            array(16, 16, 17, 17, 17, 17),
+            findFewestCoins(array(16, 17, 23, 24, 39, 40), 100)
         );
     }
 }
