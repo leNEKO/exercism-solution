@@ -1,31 +1,31 @@
 #!/usr/bin/env bash
 
 input="$@"
-r="" # init result
+res="" # init result
 
 if [[ $(echo "$input % 3" | bc) -eq 0 ]]
 then
-    a="Pling"
-    r=$r$a
+    add="Pling"
+    res=$res$add
 fi
 
 if [[ $(echo "$input % 5" | bc) -eq 0 ]]
 then
-    a="Plang"
-    r=$r$a
+    add="Plang"
+    res=$res$add
 fi
 
 if [[ $(echo "$input % 7" | bc) -eq 0 ]]
 then
-    a="Plong"
-    r=$r$a
+    add="Plong"
+    res=$res$add
 fi
 
 # if not %3 %5 nor %7 then just return the input
-if [[ ${#r} -eq 0 ]]
+if [[ ${#res} -eq 0 ]]
 then
-    r="$input"
+    res="$input"
 fi
 
-echo "$r"
+echo "$res"
 exit
