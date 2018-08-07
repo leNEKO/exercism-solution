@@ -2,19 +2,17 @@ from collections import defaultdict
 
 
 class School(object):
-    def __init__(self, name):
-        self.name = name
-        # with a default dict instead of initializing empty sets
-        self.rooster = defaultdict(set)
+    def __init__(self):
+        self.db = defaultdict(set)
 
     def grade(self, n):
-        return self.rooster[n]
+        return list(self.db[n]) or []
 
-    def add(self, student, n):
-        self.rooster[n].add(student)
+    def add_student(self, name, grade):
+        self.db[grade].add(name)
 
-    def sort(self):
-        return list(
-            (k, tuple(sorted(v)))  # acute parenthesism occuring here
-            for k, v in sorted(self.rooster.items())
-        )
+    def roster(self):
+        return [name
+                for k, v in sorted(self.db.items())
+                for name in sorted(v)
+                ]

@@ -112,3 +112,6 @@ venv.bak/
 
 # Gradle
 **/.gradle
+
+# users
+users/

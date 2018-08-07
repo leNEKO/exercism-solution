@@ -1,5 +1,5 @@
 def append(xs, ys):
-    return xs + ys
+    return concat([xs, ys])
 
 
 def concat(lists):
@@ -11,8 +11,7 @@ def filter_clone(function, xs):
 
 
 def length(xs):
-    # :|
-    return sum([1 for _ in xs])
+    return sum(1 for _ in xs)
 
 
 def map_clone(function, xs):
@@ -20,23 +19,15 @@ def map_clone(function, xs):
 
 
 def foldl(function, xs, acc):
-    r = acc
     for item in xs:
-        try:
-            r = function(item, r)
-        except ZeroDivisionError:
-            return 0
-    return r
+        acc = function(acc, item)
+    return acc
 
 
 def foldr(function, xs, acc):
-    r = acc
-    for item in xs[::-1]:
-        try:
-            r = function(item, r)
-        except ZeroDivisionError:
-            return 0
-    return r
+    for item in reverse(xs):
+        acc = function(item, acc)
+    return acc
 
 
 def reverse(xs):
