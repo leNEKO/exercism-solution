@@ -114,9 +114,52 @@ def binary_search_dandek_iterative(list_of_numbers, number):
     raise ValueError("Not in list")
 
 
+from math import floor, ceil, log, inf
+
+
+def step_size2(length):
+    step_size = 1
+    # large steps forward
+    while step_size < length:
+        step_size *= 16
+    # small steps backward
+    while step_size > length:
+        step_size //= 2
+    return step_size
+
+
+def binary_search_ptillemans(list_of_numbers, number):
+
+    length = len(list_of_numbers)
+    # find largest power of 2 <= lenght
+    step = step_size2(length)
+
+    # offset for 0-based indexing
+    mid = step - 1
+
+    while step > 0:
+        # half search space
+        step = step // 2
+
+        # over upper bound treat as too high
+        if mid >= length:
+            val = inf
+        else:
+            val = list_of_numbers[mid]
+
+        if val == number:
+            return mid
+        elif val < number:
+            mid = mid + step
+        else:
+            mid = mid - step
+
+    raise ValueError("no such number in list")
+
+
 def main():
     from timeit import timeit
-    for f in ["binary_search", "binary_search_recursive_hard_slice", "binary_search_iterative", "binary_search_dandek", "binary_search_dandek_iterative"]:
+    for f in ["binary_search", "binary_search_recursive_hard_slice", "binary_search_iterative", "binary_search_dandek", "binary_search_dandek_iterative", "binary_search_ptillemans"]:
         setup = f"from __main__ import {f}"
         t = [1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 450, 451, 455]
         r = 21
