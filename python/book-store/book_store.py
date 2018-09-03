@@ -9,10 +9,11 @@ PRICES = {
 
 
 def calculate_total(books):
-    best = False  # lowest price
+    best = PRICES[1] * len(books)  # highest price possible
+    i = 0
 
     # let's try each combinations
-    for mx in PRICES.keys():
+    for mx in list(PRICES.keys())[1:]:
         groups = []  # init groups
         bks = books[::-1]  # make a reversed copy of books
 
@@ -22,6 +23,7 @@ def calculate_total(books):
 
             # append the book in an existing group if possible
             for k, vals in enumerate(groups):
+                i += 1
                 if book not in vals and len(vals) < mx:
                     groups[k].append(book)
                     found_group = True  # …
@@ -33,9 +35,7 @@ def calculate_total(books):
 
         # calculate total of this current group combination
         total = sum([PRICES[len(group)] for group in groups])
-
         # record it as best result if lower price
-        if best is False or total < best:
-            best = total
+        best = total if total < best else best
 
     return best
