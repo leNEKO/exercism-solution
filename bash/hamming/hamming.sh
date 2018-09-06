@@ -7,7 +7,7 @@ then
     exit 1
 fi
 
-# Arguments name that match the documentation :)
+# Arguments names that match the documentation :)
 string1=$1
 string2=$2
 
@@ -20,12 +20,11 @@ fi
 
 # Action
 diff=0
-
 for (( i=0 ; i < ${#string1} ; i++ ))
 do
     if [[ ${string1:$i:1} != ${string2:$i:1} ]]
     then
-        diff=$((diff +1))
+        (( diff++ ))
     fi
 done
 
