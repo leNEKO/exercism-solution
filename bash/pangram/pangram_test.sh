@@ -72,3 +72,10 @@
     [ "$output" == "false" ]
 }
 
+@test "can handle diacritics and ligatures" {
+    # skip
+    run bash pangram.sh "àbçdfghîjklmnpqrßtÛvWxyzœ"
+    [ "$status" -eq 0 ]
+    [ "$output" == "true" ]
+}
+
