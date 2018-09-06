@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 # remove diacritics, don't think it is possible bash only
-str=$(echo $1 | iconv -t utf8 -t ascii//translit)
+str="$(echo $1 | iconv -t utf8 -t ascii//translit)"
 
 # check if each ascii char is in the lower sentence
+alpha_count=0
 for c in {a..z}; do
-    if [[ ${str,,} =~ "$c" ]]; then
+    if [[ "${str,,}" =~ "$c" ]]; then
         (( alpha_count++ ))
     fi
 done
