@@ -20,15 +20,6 @@ function parseText($line)
     return preg_replace(array_keys($rules), array_values($rules), $line);
 }
 
-// DRYer paragraph
-function parseParagraph($line)
-{
-    if (!preg_match("/^<[ulph]/", $line) && $line !== "") {
-        $line = "<p>" . $line . "</p>";
-    }
-    return $line;
-}
-
 // Li
 function parseLi($line)
 {
@@ -38,6 +29,15 @@ function parseLi($line)
     }
     return "<li>" . $line . "</li>";
 
+}
+
+// DRYer paragraph
+function parseParagraph($line)
+{
+    if (!preg_match("/^<[ulph]/", $line) && $line !== "") {
+        $line = "<p>" . $line . "</p>";
+    }
+    return $line;
 }
 
 function parseMarkdown($markdown)
