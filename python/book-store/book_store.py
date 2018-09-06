@@ -3,13 +3,13 @@ PRICES = {
     1: 800,  # no discount
     2: 1520,  # 5 %
     3: 2160,  # 10 %
-    4: 2560,  # 15 %
-    5: 3000  # 20 %
+    4: 2560,  # 20 %
+    5: 3000  # 25 %
 }
 
 
 def calculate_total(books):
-    best = PRICES[1] * len(books)  # highest price possible
+    best = float("inf")  # highest price possible
     i = 0
 
     # let's try each combinations
