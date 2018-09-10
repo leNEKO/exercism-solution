@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
 
-# in tests for alternate whitespaces
-# new lines \n \r and tabs \t are not properly escaped
-# they are passed as "\n\r\t"
-# instead of $'\n\r\t'
-str=$(echo $1 | sed 's/\\\w//g')
-chars=$(echo $str | tr -cd '[:alnum:][:punct:]')
-alpha=$(echo $str | tr -cd '[:alpha:]')
+str="${1//\\[a-z]/}" # hack removing fake unescaped whitespaces
+chars="${str//[![:alnum:][:punct:]]/}"
+alpha="${str//[![:alpha:]]/}"
 
 if [[ "$chars" == "" ]]; then
     echo "Fine. Be that way!"
