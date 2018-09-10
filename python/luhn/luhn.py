@@ -17,4 +17,6 @@ class Luhn(object):
         )
         evens = sum(self.cn[0::2])
 
-        return (odds + evens) % 10 == 0
+        checksum = (odds + evens) % 10
+
+        return checksum == 0
