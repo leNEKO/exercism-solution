@@ -1,5 +1,5 @@
 import re
-import math
+from math import ceil
 
 
 def encode(plain_text):
@@ -9,9 +9,9 @@ def encode(plain_text):
         return ""
 
     size = len(flat)
-    sq = math.ceil(size ** .5)
+    sq = ceil(size ** .5)
     c = sq
-    r = math.ceil(size / c)
+    r = ceil(size / c)
 
     flat = flat.ljust(c*r)
     return " ".join([''.join(flat[i::c]) for i in range(c)])

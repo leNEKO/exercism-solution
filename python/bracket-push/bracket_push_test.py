@@ -52,8 +52,8 @@ class BracketPushTest(unittest.TestCase):
     def test_complex_latex_expression(self):
         self.assertEqual(
             is_paired(
-                (r"\\left(\\begin{array}{cc} \\frac{1}{3} & x\\\\ \\mathrm{e}^{"
-                 r"x} &... x^2 \\end{array}\\right)")), True)
+                ("\\left(\\begin{array}{cc} \\frac{1}{3} & x\\\\ \\mathrm{e}^{"
+                 "x} &... x^2 \\end{array}\\right)")), True)
 
 
 if __name__ == '__main__':

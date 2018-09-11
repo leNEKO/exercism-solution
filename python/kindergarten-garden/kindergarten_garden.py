@@ -1,26 +1,16 @@
 class Garden(object):
-    PLANTS = {
-        "R": "Radishes",
-        "V": "Violets",
-        "C": "Clover",
-        "G": "Grass",
-    }
-
-    DEFAULT_STUDENTS = "Alice Bob Charlie David Eve Fred Ginny Harriet Ileana Joseph Kincaid Larry".split()
+    DEFAULT_STUDENTS = ("Alice Bob Charlie David Eve Fred Ginny "
+                        "Harriet Ileana Joseph Kincaid Larry").split()
+    PLANTS = {p[0]: p for p in "Radishes Violets Clover Grass".split()}
 
     def __init__(self, diagram, students=DEFAULT_STUDENTS):
         students = sorted(students)
-        zone = {}
-        for student in students:
-            zone.update({student: []})
+        zone = dict((student, []) for student in students)
 
-        for row in diagram.split("\n"):
+        for row in diagram.split():
             for k, cup in enumerate(row):
-                try:
-                    student = students[int(k*.5)]
-                    zone[student].append(self.PLANTS[cup])
-                except:
-                    pass
+                student = students[k//2]
+                zone[student].append(self.PLANTS[cup])
 
         self.zone = zone
 

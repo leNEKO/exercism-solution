@@ -1,8 +1,8 @@
 <?php
 class SpaceAge
 {
-    const EARTH_YEAR = 31557600;
-    const RATIOS = [
+    private const EARTH_YEAR = 31557600;
+    private const RATIOS = [
         "earth" => 1,
         "mercury" => 0.2408467,
         "venus" => 0.61519726,

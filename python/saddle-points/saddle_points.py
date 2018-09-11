@@ -8,7 +8,7 @@ def saddle_points(matrix):
 
     # init list
     rows = matrix
-    columns = [*zip(*matrix)]  # wow just learn about this
+    columns = [*zip(*matrix)]  # wow what a shortcut :)
 
     sp = set()
     for y, row in enumerate(rows):
