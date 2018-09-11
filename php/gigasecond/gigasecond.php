@@ -1,10 +1,7 @@
 <?php
-function from(DateTime $date): DateTimeImmutable
+function from(DateTime $date): DateTime
 {
-    $nu_date = DateTimeImmutable::createFromMutable($date);
-    return $nu_date->add(
-        DateInterval::createFromDateString(
-            10 ** 9 . " seconds"
-        )
+    return (clone $date)->add(
+        DateInterval::createFromDateString(1e9 . " seconds")
     );
 }
