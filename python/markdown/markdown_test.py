@@ -94,20 +94,31 @@ class MyTest(unittest.TestCase):
         self.assertEqual(parse_text("_Hello_ __WORLD__!"),
                          "<em>Hello</em> <strong>WORLD</strong>!")
 
-    @unittest.skip("need li to be implemented")
+    # @unittest.skip("need li to be implemented")
     def test_parse_li(self):
         self.assertEqual(
             parse_li("Hello world"),
             "<li>Hello world</li>"
         )
 
-    @unittest.skip("need li to be implemented")
-    def test_parse_paragraph(self):
+    def test_parse_code(self):
         self.assertEqual(
-            parse_paragraph(
-                parse_li("Hello World")
-            ),
-            "<p>Hello World</p>"
+            parse_text("`Ceci étant cela`"),
+            "<code>Ceci étant cela</code>"
+        )
+
+    def test_parse_code_multiline(self):
+        lang = "python"
+        code = '''ceci = "cela"\nmachin = "patin"\ndef stuff():\n\treturn " ".join((ceci,cela))\n'''
+        markdown = f'```{lang}\n{code}\n```'
+        html = f'<pre class="language-{lang}"><code>{code}</code></pre>'
+        # for d in [markdown, html, parse_text(markdown)]:
+        #     print()
+        #     print(d)
+
+        self.assertEqual(
+            parse_text(markdown),
+            html
         )
 
 
