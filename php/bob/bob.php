@@ -22,16 +22,16 @@ class Bob
         $is_question = substr($chars, -1) === "?";
         $is_upper = $alpha && (mb_strtoupper($alpha) === $alpha);
 
-        $response = "Whatever.";
         if ($is_question && $is_upper) {
-            $response = "Calm down, I know what I'm doing!";
+            return "Calm down, I know what I'm doing!";
         } elseif ($is_upper) {
-            $response = "Whoa, chill out!";
+            return "Whoa, chill out!";
         } elseif ($is_question) {
-            $response = "Sure.";
+            return "Sure.";
         }
 
-        return $response;
+        return "Whatever.";
+
     }
 }
 
