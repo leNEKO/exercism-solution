@@ -3,45 +3,39 @@
 
 class Bob
 {
-    private $brain = [
-        0b100 => "Sure.",
-        0b010 => "Whoa, chill out!",
-        0b110 => "Calm down, I know what I'm doing!",
-        0b111 => "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn",
-        0b001 => "Fine. Be that way!",
-        0b000 => "Whatever.",
-    ];
-
     public function respondTo(string $message): string
     {
-        // normalized
-        $normalized = trim(preg_replace("/[^[:alnum:]\?]/u", "", $message));
+        // chars
+        preg_match_all('/[[:alnum:][:punct:]]/u', $message, $matches);
+        $chars = implode("", $matches[0]);
 
-        // nothing
-        if (!$normalized) {
-            return $this->brain[0b001];
+        // alphas
+        preg_match_all('/[[:alpha:]]/u', $message, $matches);
+        $alpha = implode("", $matches[0]);
+
+        // if nothing said no need to go further
+        if ($chars === "") {
+            return "Fine. Be that way!";
         }
 
-        // anything
-        $state = 0b000;
+        # sentence properties
+        $is_question = substr($chars, -1) === "?";
+        $is_upper = $alpha && (mb_strtoupper($alpha) === $alpha);
 
-        // question
-        if ($normalized[-1] === "?") {
-            $state += 0b100;
+        $response = "Whatever.";
+        if ($is_question && $is_upper) {
+            $response = "Calm down, I know what I'm doing!";
+        } elseif ($is_upper) {
+            $response = "Whoa, chill out!";
+        } elseif ($is_question) {
+            $response = "Sure.";
         }
 
-        // yelling
-        $letters = preg_replace("/[^[:alpha:]]/u", "", $message);
-        $upper = mb_strtoupper($letters);
-        if ($letters && ($letters === $upper)) {
-            $state += 0b010;
-        }
-
-        return $this->brain[$state];
+        return $response;
     }
 }
 
 if (!debug_backtrace()) {
     $b = new Bob();
-    var_dump($b->respondTo("1,2,3"));
+    var_dump($b->respondTo("1,2,3 ?"));
 }
