@@ -19,7 +19,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testCanFindTheLargestProductOf2()
     {
-        //$this->markTestSkipped();
 
         $series = new Series(576802143);
         $this->assertEquals(48, $series->largestProduct(2));
@@ -27,7 +26,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testFindsTheLargestProductIfSpanEqualsLength()
     {
-        //$this->markTestSkipped();
 
         $series = new Series(29);
         $this->assertEquals(18, $series->largestProduct(2));
@@ -35,7 +33,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testCanFindTheLargestProductOf3WithNumbersInOrder()
     {
-        //$this->markTestSkipped();
 
         $series = new Series(123456789);
         $this->assertEquals(504, $series->largestProduct(3));
@@ -43,7 +40,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testCanFindTheLargestProductOf3()
     {
-        //$this->markTestSkipped();
 
         $series = new Series(1027839564);
         $this->assertEquals(270, $series->largestProduct(3));
@@ -51,7 +47,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testCanFindTheLargestProductOf5WithNumbersInOrder()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("0123456789");
         $this->assertEquals(15120, $series->largestProduct(5));
@@ -59,7 +54,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testCanGetTheLargestProductOfABigNumber()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("73167176531330624919225119674426574742355349194934");
         $this->assertEquals(23520, $series->largestProduct(6));
@@ -67,7 +61,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testCanGetTheLargestProductOfABigNumberProjectEuler()
     {
-        //$this->markTestSkipped();
 
         $digits = "731671765313306249192251196744265747423553491949349698352031277450632623957831801698480186947"
             . "8851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096"
@@ -87,7 +80,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testReportsZeroIfTheOnlyDigitsAreZero()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("0000");
         $this->assertEquals(0, $series->largestProduct(2));
@@ -95,7 +87,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
 
     public function testReportsZeroIfAllSpansIncludeZero()
     {
-        //$this->markTestSkipped();
 
         $series = new Series(99099);
         $this->assertEquals(0, $series->largestProduct(3));
@@ -106,7 +97,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
      */
     public function testRejectsSpanLongerThanStringLength()
     {
-        //$this->markTestSkipped();
 
         $series = new Series(123);
         $series->largestProduct(4);
@@ -129,7 +119,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
      */
     public function testReports1ForEmptyStringAndEmptyProduct0Span()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("");
         $this->assertEquals(1, $series->largestProduct(0));
@@ -141,7 +130,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
      */
     public function testReports1ForNonemptyStringAndEmptyProduct0Span()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("123");
         $this->assertEquals(1, $series->largestProduct(0));
@@ -152,7 +140,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
      */
     public function testRejectsEmptyStringAndNonzeroSpan()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("");
         $series->largestProduct(1);
@@ -163,7 +150,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
      */
     public function testRejectsInvalidCharacterInDigits()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("1234a5");
         $series->largestProduct(2);
@@ -174,7 +160,6 @@ class SeriesTest extends PHPUnit\Framework\TestCase
      */
     public function testRejectsNegativeSpan()
     {
-        //$this->markTestSkipped();
 
         $series = new Series("12345");
         $series->largestProduct(-1);

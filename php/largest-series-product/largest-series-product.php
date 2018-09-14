@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 class Series
 {
@@ -6,8 +6,9 @@ class Series
 
     public function __construct(string $seq)
     {
-        if ($seq != preg_replace("/\D/", "", $seq)) { // …
-            throw new InvalidArgumentException();
+        // seq. must be digits only
+        if (preg_match_all("/[^\d]/", $seq, $m)) {
+            throw new InvalidArgumentException("Invalid seq.");
         }
         $this->seq = $seq;
     }
@@ -16,16 +17,13 @@ class Series
     {
         $seq_length = strlen($this->seq);
 
-        if ($length > $seq_length) {
-            throw new InvalidArgumentException();
+        // 0 <= length < seq. length
+        if ($seq_length < $length || $length < 0) {
+            throw new InvalidArgumentException("Invalid length");
         }
 
-        if (!$seq_length || !$length) {
-            return 1; // why … i don't know, explication are more confusing to me … whatever here 1
-        }
-
-        if ($length < 0) {
-            throw new InvalidArgumentException("must be >= 0");
+        if (!$length) {
+            return 1;
         }
 
         $hi_product = 0;
@@ -34,6 +32,7 @@ class Series
         for ($i = 0; $i <= $max; $i++) {
             $sub = substr($this->seq, $i, $length);
             $product = array_product(str_split($sub));
+
             if ($product > $hi_product) {
                 $hi_product = $product;
             }
