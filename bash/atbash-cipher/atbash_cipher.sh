@@ -2,9 +2,6 @@
 
 ABC="abcdefghijklmnopqrstuvwxyz" # 26 char latin alphabet
 
-# action
-func=$1
-
 # normalizing
 input=${2,,} # lowercase string input
 alpha=${input//[![:alnum:]]/} # alpha numerical only chars
@@ -31,7 +28,7 @@ function codec(){
 
 # specific logic
 function encode(){
-    str=$(codec $input)
+    str=$(codec)
     # split in chunk
     out=""
     for (( i = 0 ; i < ${#str} ; i += 5 )); do
@@ -42,8 +39,9 @@ function encode(){
 
 function decode(){
     # nothing else special to do
-    echo $(codec $input)
+    echo $(codec)
 }
 
-# feed the input to the proper function
-$func input
+# run the proper function
+$1
+exit 0
