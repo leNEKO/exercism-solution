@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// Distance calculate hamming diff
 func Distance(a, b string) (int, error) {
 	if len(a) != len(b) {
 		return -1, errors.New("length error")
