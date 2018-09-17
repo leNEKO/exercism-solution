@@ -25,14 +25,18 @@ function codec(){
         echo -n $out_char # output char
     done
 }
+# non pure bash alternative
+function alt_codec(){
+    echo $alpha | tr "$ABC" "$(echo $ABC | rev)"
+}
 
 # specific logic
 function encode(){
     str=$(codec)
-    # split in chunk
+    # split in 5 chars chunk
     out=""
     for (( i = 0 ; i < ${#str} ; i += 5 )); do
-        out="$out ${str:i:5}"
+        out="$out ${str:i:5}" # imploding with space as separtor
     done
     echo $out
 }
