@@ -5,33 +5,55 @@ function isIsogram(string $str): bool
     return isIsogramUniq($str);
 }
 
-// faster approach
-function isIsogramUniq(string $str): bool
-{
-    $lower = mb_strtolower($str);
-    preg_match_all('/\w/u', $lower, $matches);
-    $chars = $matches[0];
-    return array_unique($chars) == $chars;
-}
-// split is slightly slower
+// splitting string instead of preg_match_all is slightly slower
 function isIsogramUniqSplit(string $str): bool
 {
     $str = preg_replace('/\s+/', '', $str);
     $chars = preg_split('//u', mb_strtolower($str), null, PREG_SPLIT_NO_EMPTY);
-    return array_unique($chars) == $chars;
+    return array_unique($chars) === $chars;
 }
 
-// shortcircuit a foor loop is not faster than array_uniq
-function isIsogramLoop(string $str): bool
+// common code
+function normalize(string $str): array
 {
     $lower = mb_strtolower($str);
     preg_match_all('/\w/u', $lower, $matches);
-    $c = [];
-    foreach ($matches[0] as $char) {
-        if (in_array($char, $c)) {
+    return $matches[0];
+}
+
+// faster approach
+function isIsogramUniq(string $str): bool
+{
+    $chars = normalize($str);
+
+    return array_unique($chars) === $chars;
+}
+
+// shortcircuit a for loop is not faster than array_uniq
+function isIsogramLoopInarray(string $str): bool
+{
+    $chars = normalize($str);
+
+    $been_found = [];
+    foreach ($chars as $char) {
+        if (in_array($char, $been_found, true)) {
             return false;
         }
-        $c[] = $char;
+        $been_found[] = $char;
+    }
+    return true;
+}
+// checking if isset(…) seems faster than in_array(…)
+function isIsogramLoopIsset(string $str): bool
+{
+    $chars = normalize($str);
+
+    $been_found = [];
+    foreach ($chars as $char) {
+        if (isset($been_found[$char])) {
+            return false;
+        }
+        $been_found[$char] = true;
     }
     return true;
 }
@@ -39,51 +61,80 @@ function isIsogramLoop(string $str): bool
 // reduce is way slower
 function isIsogramReduce(string $str): bool
 {
-    $lower = mb_strtolower($str);
-    preg_match_all('/\w/u', $lower, $matches);
-    $chars = $matches[0];
-    $arr = [];
-    $check = function ($x, $y) use (&$arr) {
-        $rtn = in_array($y, $arr);
-        $arr[] = $y;
-        return $x && !$rtn;
+    $chars = normalize($str);
+
+    $been_found = [];
+    $check = function (bool $is_isogram, string $char) use (&$been_found) {
+        $found = isset($been_found[$char]);
+        $been_found[] = $char;
+        return $is_isogram && !$found;
     };
+
     return array_reduce($chars, $check, true);
+}
+
+function isIsogramCountFilter(string $str): bool
+{
+    $chars = normalize($str);
+
+    $counted = array_count_values($chars);
+    $isnot_isogram = function (int $v) {
+        return $v > 1;
+    };
+
+    return (bool) !array_filter($counted, $isnot_isogram);
+}
+
+function isIsogramCountLoop(string $str): bool
+{
+    $chars = normalize($str);
+
+    foreach (array_count_values($chars) as $v) {
+        if ($v > 1) {
+            return false;
+        }
+    };
+    return true;
 }
 
 if (!debug_backtrace()) {
     # benchmarking
-    function benchmark($action, $times = 1000)
+    function benchmark(\Closure $action, $times = 1000)
     {
-        $time_start = microtime(true);
-        while ($times) {
+        $chrono_start = microtime(true);
+        for ($i = 0; $i < $times; $i++) {
             $action();
-            $times--;
         }
-        $time_end = microtime(true);
-        $duration = round(($time_end - $time_start) * 1000, 2);
-        print("$duration ms.\n");
+        $chrono_end = microtime(true);
+        return ($chrono_end - $chrono_start) / $times;
     }
 
     $txt = 'Heizölrückstoßabdämpfung';
-    $loop_test = function () use ($txt) {
-        return isIsogramLoop($txt);
-    };
 
-    $uniq_test = function () use ($txt) {
-        return isIsogramUniq($txt);
-    };
-    $uniq_split_test = function () use ($txt) {
-        return isIsogramUniqSplit($txt);
-    };
+    $i = 10000; // benchmarking iterations
+    $methods = [
+        "isIsogramUniq",
+        "isIsogramUniqSplit",
+        "isIsogramLoopInarray",
+        "isIsogramLoopIsset",
+        "isIsogramReduce",
+        "isIsogramCountFilter",
+        "isIsogramCountLoop",
+    ];
 
-    $reduce_test = function () use ($txt) {
-        return isIsogramReduce($txt);
-    };
+    $r = [];
+    foreach ($methods as $m) {
+        $func = function () use ($txt, $m) {
+            return $m($txt);
+        };
+        $r[$m] = benchmark($func, $i);
+    }
+    asort($r);
 
-    $i = 10000;
-    benchmark($uniq_test, $i);
-    benchmark($uniq_split_test, $i);
-    benchmark($loop_test, $i);
-    benchmark($reduce_test, $i);
+    $n = 0;
+    foreach ($r as $m => $dur) {
+        $n++;
+        $t = $dur * 1e6;
+        echo "#{$n} - $m :\n$t µs.\n\n";
+    }
 }
