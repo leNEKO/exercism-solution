@@ -1,4 +1,4 @@
-# Twofer: return a sentence …
+# Twofer: return a sentence ...
 class TwoFer
   def self.two_fer(name = 'you')
     "One for #{name}, one for me."
