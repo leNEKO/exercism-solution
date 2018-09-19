@@ -1,4 +1,12 @@
 <?php
+// common code
+function normalize(string $str): array
+{
+    $lower = mb_strtolower($str);
+    preg_match_all('/\w/u', $lower, $matches);
+    return $matches[0];
+}
+
 // faster approach seems to be the one using array_unique
 function isIsogram(string $str): bool
 {
@@ -11,14 +19,6 @@ function isIsogramUniqSplit(string $str): bool
     $str = preg_replace('/\s+/', '', $str);
     $chars = preg_split('//u', mb_strtolower($str), null, PREG_SPLIT_NO_EMPTY);
     return array_unique($chars) === $chars;
-}
-
-// common code
-function normalize(string $str): array
-{
-    $lower = mb_strtolower($str);
-    preg_match_all('/\w/u', $lower, $matches);
-    return $matches[0];
 }
 
 // faster approach
@@ -97,6 +97,26 @@ function isIsogramCountLoop(string $str): bool
     return true;
 }
 
+function isIsogramStudent(string $input)
+{
+    if (strlen($input) === 0) {
+        return false;
+    }
+    // $alphabet = array_flip(str_split('abcdefghijklmnopqrstuvwxyz'));
+    $lower = mb_strtolower($input);
+    preg_match_all("/\w/u", $lower, $m);
+    $test = $m[0];
+    $alphabet = [];
+
+    foreach ($test as $char) {
+        if (isset($alphabet[$char])) {
+            return false;
+        }
+        $alphabet[$char] = true;
+    }
+    return true;
+}
+
 if (!debug_backtrace()) {
     # benchmarking
     function benchmark(\Closure $action, $times = 1000)
@@ -120,6 +140,7 @@ if (!debug_backtrace()) {
         "isIsogramReduce",
         "isIsogramCountFilter",
         "isIsogramCountLoop",
+        "isIsogramStudent",
     ];
 
     $r = [];
