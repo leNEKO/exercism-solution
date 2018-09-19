@@ -1,7 +1,7 @@
 <?php
 
 // Regex only implementation is faster
-use runLengthLoop as runLength;
+use runLengthStudent as runLength;
 
 function encode($input): string
 {
@@ -80,11 +80,64 @@ class runLengthRegex
     }
 }
 
-if (!debug_backtrace()) {
-    $cod = "AAAAAABBBBBBCCCCCCDDDDEFEFKZPEFEKP";
-    $dec = encode($cod);
-    var_dump([$cod, $dec, decode($dec)]);
+class runLengthStudent
+{
+    public function encode($input)
+    {
+        $count = 1;
+        $compare = '';
+        $output = '';
 
+        if (!$input) {
+            return '';
+        }
+
+        foreach (str_split($input) as $char) {
+
+            if ($char === $compare) {
+                $count++;
+            } else {
+                if ($count > 1) {
+                    $output .= $count;
+                }
+                $output .= $compare;
+                $count = 1;
+            }
+
+            $compare = $char;
+        }
+
+        if ($count > 1) {
+            $output .= $count;
+        }
+
+        $output .= $char;
+
+        return $output;
+    }
+
+    public function decode($input)
+    {
+        $output = '';
+
+        preg_match_all('/([1-9]*)(\w|\s)/', $input, $matches);
+
+        for ($index = 0; $index < count($matches[0]); $index++) {
+            $count = $matches[1][$index];
+
+            if ($count === '') {
+                $count = 1;
+            }
+
+            $char = $matches[2][$index];
+            $output .= str_repeat($char, (int) $count);
+        }
+
+        return $output;
+    }
+}
+
+if (!debug_backtrace()) {
     # benchmarking
     function benchmark($callback, $i = 100)
     {
@@ -99,26 +152,32 @@ if (!debug_backtrace()) {
         return "$duration ms.\n";
     }
 
-    foreach (["runLengthLoop", "runLengthRegex"] as $n) {
+    $implementations = [
+        "runLengthLoop",
+        "runLengthRegex",
+        "runLengthStudent",
+    ];
+
+    $small_data = "AAAAAABBBBBBCCCCCCDDDDEFEFKZPEFEKP";
+    $big_data = file_get_contents("alice.txt");
+
+    foreach ($implementations as $n) {
         print("\n---- $n ----\n");
 
         # big file
-        $cod = file_get_contents("alice.txt");
-        $command = function () use ($n, $cod) {
-            $dec = $n::encode($cod);
+        $command = function () use ($n, $big_data) {
+            $dec = $n::encode($big_data);
             $n::decode($dec);
         };
         print("big file: ");
-        print(benchmark($command, 1));
+        print(benchmark($command, 5));
 
         # small file
-        $cod = "AAAAAABBBBBBCCCCCCDDDDEFEFKZPEFEKP";
-        $command = function () use ($n, $cod) {
-            $dec = $n::encode($cod);
+        $command = function () use ($n, $small_data) {
+            $dec = $n::encode($small_data);
             $n::decode($dec);
         };
         print("small file: ");
-        print(benchmark($command, 10000));
-        benchmark($command, 5000);
+        print(benchmark($command, 50000));
     }
 }
