@@ -1,7 +1,7 @@
 <?php
 
 // Regex only implementation is faster
-use runLengthStudent as runLength;
+use runLengthRegex as runLength;
 
 function encode($input): string
 {
@@ -80,63 +80,6 @@ class runLengthRegex
     }
 }
 
-class runLengthStudent
-{
-    public function encode($input)
-    {
-        $count = 1;
-        $compare = '';
-        $output = '';
-
-        if (!$input) {
-            return '';
-        }
-
-        foreach (str_split($input) as $char) {
-
-            if ($char === $compare) {
-                $count++;
-            } else {
-                if ($count > 1) {
-                    $output .= $count;
-                }
-                $output .= $compare;
-                $count = 1;
-            }
-
-            $compare = $char;
-        }
-
-        if ($count > 1) {
-            $output .= $count;
-        }
-
-        $output .= $char;
-
-        return $output;
-    }
-
-    public function decode($input)
-    {
-        $output = '';
-
-        preg_match_all('/([1-9]*)(\w|\s)/', $input, $matches);
-
-        for ($index = 0; $index < count($matches[0]); $index++) {
-            $count = $matches[1][$index];
-
-            if ($count === '') {
-                $count = 1;
-            }
-
-            $char = $matches[2][$index];
-            $output .= str_repeat($char, (int) $count);
-        }
-
-        return $output;
-    }
-}
-
 if (!debug_backtrace()) {
     # benchmarking
     function benchmark($callback, $i = 100)
@@ -155,7 +98,6 @@ if (!debug_backtrace()) {
     $implementations = [
         "runLengthLoop",
         "runLengthRegex",
-        "runLengthStudent",
     ];
 
     $small_data = "AAAAAABBBBBBCCCCCCDDDDEFEFKZPEFEKP";
