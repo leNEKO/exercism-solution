@@ -18,7 +18,6 @@ const system = [
 
 function toRoman(int $i)
 {
-
     $output = "";
 
     foreach (system as $arab => $roman) {
@@ -29,5 +28,3 @@ function toRoman(int $i)
 
     return $output;
 }
-
-toRoman(10);
