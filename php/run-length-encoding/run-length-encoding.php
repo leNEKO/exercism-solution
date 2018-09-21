@@ -57,6 +57,51 @@ class runLengthLoop
 
 }
 
+class runLengthLoopAlt
+{
+
+    public static function encode($input): string
+    {
+
+        $encoded = "";
+        $last_char = "";
+        $counter = 1;
+
+        foreach (str_split($input . " ") as $char) {
+            $same = $char === $last_char;
+            $counter += (int) $same;
+            if (!$same) {
+                $encoded .= ($counter > 1) ? $counter : "";
+                $encoded .= $last_char;
+                $counter = 1; # reset counter
+            }
+            $last_char = $char;
+        }
+
+        return $encoded;
+    }
+
+    public static function decode($input): string
+    {
+        $decoded = "";
+        $digit = "";
+
+        foreach (str_split($input) as $char) {
+            if (ctype_digit($char)) {
+                $digit .= $char;
+            } else {
+                if (!$digit) {
+                    $digit = "1";
+                }
+                $decoded .= str_repeat($char, (int) $digit);
+                $digit = ""; # reset digit
+            }
+        }
+        return $decoded;
+    }
+
+}
+
 class runLengthRegex
 {
     public static function encode($input): string
@@ -72,6 +117,68 @@ class runLengthRegex
 
     public static function decode($input): string
     {
+        // callback
+        $c = function ($m) {
+            return str_repeat($m[2], $m[1]);
+        };
+        return preg_replace_callback('/(\d+)(\D)/', $c, $input);
+    }
+}
+
+class runLengthRegexWithEmpty
+{
+    public static function encode($input): string
+    {
+        if (empty($input)) {
+            return '';
+        }
+
+        // callback
+        $c = function ($m) {
+            $l = strlen($m[0]);
+            $d = $l > 1 ? $l : '';
+            return $d . $m[1];
+        };
+        return preg_replace_callback('/(.)\1*/', $c, $input);
+    }
+
+    public static function decode($input): string
+    {
+        if (empty($input)) {
+            return '';
+        }
+
+        // callback
+        $c = function ($m) {
+            return str_repeat($m[2], $m[1]);
+        };
+        return preg_replace_callback('/(\d+)(\D)/', $c, $input);
+    }
+}
+
+class runLengthRegexWithStrlen
+{
+    public static function encode($input): string
+    {
+        if (strlen($input) === 0) {
+            return '';
+        }
+
+        // callback
+        $c = function ($m) {
+            $l = strlen($m[0]);
+            $d = $l > 1 ? $l : '';
+            return $d . $m[1];
+        };
+        return preg_replace_callback('/(.)\1*/', $c, $input);
+    }
+
+    public static function decode($input): string
+    {
+        if (strlen($input) === 0) {
+            return '';
+        }
+
         // callback
         $c = function ($m) {
             return str_repeat($m[2], $m[1]);
@@ -97,7 +204,10 @@ if (!debug_backtrace()) {
 
     $implementations = [
         "runLengthLoop",
+        "runLengthLoopAlt",
         "runLengthRegex",
+        "runLengthRegexWithEmpty",
+        "runLengthRegexWithStrlen",
     ];
 
     $small_data = "AAAAAABBBBBBCCCCCCDDDDEFEFKZPEFEKP";
@@ -112,14 +222,23 @@ if (!debug_backtrace()) {
             $n::decode($dec);
         };
         print("big file: ");
-        print(benchmark($command, 5));
+        print(benchmark($command, 4));
 
         # small file
         $command = function () use ($n, $small_data) {
             $dec = $n::encode($small_data);
             $n::decode($dec);
         };
-        print("small file: ");
-        print(benchmark($command, 50000));
+        print("small data: ");
+        print(benchmark($command, 40000));
+
+        # empty
+        $command = function () use ($n, $small_data) {
+            $dec = $n::encode("");
+            $n::decode($dec);
+        };
+        print("empty: ");
+        print(benchmark($command, 200000));
+
     }
 }
