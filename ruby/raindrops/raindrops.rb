@@ -1,4 +1,4 @@
-# Raindrops : slighty better at doing the sounds
+# Raindrops : now
 class Raindrops
   PRIME_TO_SOUND = {
     3 => 'Pling',
