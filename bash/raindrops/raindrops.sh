@@ -3,23 +3,19 @@
 input="$@"
 res="" # init result
 
-if [[ $(echo "$input % 3" | bc) -eq 0 ]]
-then
-    add="Pling"
-    res=$res$add
-fi
+PRIME_TO_SOUND=(
+    [3]=Pling
+    [5]=Plang
+    [7]=Plong
+)
 
-if [[ $(echo "$input % 5" | bc) -eq 0 ]]
-then
-    add="Plang"
-    res=$res$add
-fi
-
-if [[ $(echo "$input % 7" | bc) -eq 0 ]]
-then
-    add="Plong"
-    res=$res$add
-fi
+for k in "${!PRIME_TO_SOUND[@]}"
+do
+    if (( input % k == 0 ))
+    then
+        res=$res${PRIME_TO_SOUND[$k]}
+    fi
+done
 
 # if not %3 %5 nor %7 then just return the input
 if [[ ${#res} -eq 0 ]]
