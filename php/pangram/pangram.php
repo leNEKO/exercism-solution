@@ -1,9 +1,11 @@
 <?php
 function isPangram(string $str): bool
 {
-    $lower = strtolower($str);
-    preg_match_all('/[a-z]/', $lower, $m);
+    if (empty($str)) {
+        return false;
+    }
+
+    preg_match_all('/[a-z]/i', $str, $m);
     $letters = array_unique($m[0]);
-    sort($letters);
-    return $letters === range("a", "z");
+    return count($letters) >= 26;
 }
