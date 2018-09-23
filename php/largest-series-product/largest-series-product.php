@@ -13,7 +13,7 @@ class Series
         $this->seq = $seq;
     }
 
-    public function largestProduct(int $length)
+    public function largestProduct(int $length): int
     {
         $seq_length = strlen($this->seq);
 
