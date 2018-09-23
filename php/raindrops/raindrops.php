@@ -1,22 +1,16 @@
 <?php
+const PRIME_TO_SOUND = [
+    3 => "Pling",
+    5 => "Plang",
+    7 => "Plong",
+];
+
 function raindrops(int $i): string
 {
-    $r = "";
-    if ($i % 3 == 0) {
-        $r .= "Pling";
-    }
+    $callback = function ($prime) use ($i) {
+        return $i % $prime == 0;
+    };
 
-    if ($i % 5 == 0) {
-        $r .= "Plang";
-    }
-
-    if ($i % 7 == 0) {
-        $r .= "Plong";
-    }
-
-    if ($r == "") {
-        $r = (string) $i;
-    }
-
-    return $r;
+    $sounds = array_filter(PRIME_TO_SOUND, $callback, ARRAY_FILTER_USE_KEY);
+    return $sounds ? implode($sounds) : $i;
 }
