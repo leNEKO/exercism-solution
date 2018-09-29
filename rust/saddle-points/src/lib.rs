@@ -15,7 +15,7 @@ pub fn find_saddle_points(rows: &[Vec<u64>]) -> Vec<(usize, usize)> {
     let mut columns = vec![vec![0; h]; w];
     for (y, row) in rows.iter().enumerate() {
         for (x, val) in row.iter().enumerate() {
-            columns[x][y] = val.clone();
+            columns[x][y] = *val;
         }
     }
 
