@@ -7,7 +7,7 @@ class Series
     public function __construct(string $seq)
     {
         // seq. must be digits only
-        if (preg_match_all("/[^\d]/", $seq, $m)) {
+        if (preg_match("/[^\d]/", $seq)) {
             throw new InvalidArgumentException("Invalid seq.");
         }
         $this->seq = $seq;
