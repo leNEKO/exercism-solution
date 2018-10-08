@@ -11,23 +11,23 @@ pub fn find_saddle_points(rows: &[Vec<u64>]) -> Vec<(usize, usize)> {
         return saddles;
     }
 
-    // my "no clue" transposition
-    let mut columns = vec![vec![0; h]; w];
-    for (y, row) in rows.iter().enumerate() {
-        for (x, val) in row.iter().enumerate() {
-            columns[x][y] = *val;
-        }
-    }
+    // storage for already found column mins
+    let mut cols_min: Vec<Option<u64>> = vec![None; w];
 
-    // Again his nested uglyness
+    // let's iterate
     for (y, row) in rows.iter().enumerate() {
         let max_in_row = row.iter().max().unwrap();
         for (x, val) in row.iter().enumerate() {
-            let min_in_col = columns[x].iter().min().unwrap();
-            if (val == min_in_col) && (val == max_in_row) {
+            // a closure that return the min value in current column index x
+            let get_min = || rows.iter().map(|row| row[x]).min().unwrap();
+            // search for the min only if not found yet
+            let min_in_col = cols_min[x].get_or_insert_with(get_min);
+
+            if (min_in_col == val) && (max_in_row == val) {
                 saddles.push((y, x));
             }
         }
     }
+
     saddles
 }
