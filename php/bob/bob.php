@@ -9,14 +9,14 @@ class Bob
         preg_match_all('/[[:alnum:][:punct:]]/u', $message, $matches);
         $chars = implode("", $matches[0]);
 
-        // alphas
-        preg_match_all('/[[:alpha:]]/u', $message, $matches);
-        $alpha = implode("", $matches[0]);
-
         // if nothing said no need to go further
         if ($chars === "") {
             return "Fine. Be that way!";
         }
+
+        // alphas
+        preg_match_all('/[[:alpha:]]/u', $message, $matches);
+        $alpha = implode("", $matches[0]);
 
         # sentence properties
         $is_question = substr($chars, -1) === "?";
