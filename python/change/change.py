@@ -1,7 +1,7 @@
 from itertools import combinations
 
 
-def find_minimum_coins(total_change: int, coins: list) -> list:
+def find_minimum_coins_neko(total_change: int, coins: list) -> list:
     if total_change == 0:
         return []  # an empty list if no change
 
@@ -93,3 +93,32 @@ def optimize_coins(coins: list, comb: list) -> list:
                     comb += [next_coin] * res
                     break  # no need to go further
     return sorted(comb)
+
+
+def find_minimum_coins_karel(total_change, coins):
+    if total_change < 0:
+        raise ValueError(f"You still need to give me {-total_change} coins")
+    bests = [[]] + [-1] * (total_change + max(coins))
+    for i in range(total_change):
+        if bests[i] == -1:
+            continue
+        for c in coins:
+            cs = bests[i] + [c]
+            if bests[c + i] == -1 or len(cs) < len(bests[c + i]):
+                bests[c + i] = sorted(cs)
+    solution = bests[total_change]
+    if solution == -1:
+        raise ValueError("I can't give you the exact amount")
+    return solution
+
+
+find_minimum_coins = find_minimum_coins_karel
+
+
+def main():
+    x = find_minimum_coins_karel(8, [1, 2, 5, 10])
+    print(x)
+
+
+if __name__ == '__main__':
+    main()
