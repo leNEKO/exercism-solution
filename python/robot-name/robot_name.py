@@ -13,8 +13,12 @@ MAX = (len(ASCIIS) ** PADASCII * len(DIGITS) ** PADDIGIT)
 INIT = random.randint(0, MAX)  # start at random position
 CURRENT = INIT
 # random step
-STEP = MAX // random.choice([i for i in range(1, 100) if (MAX % (MAX // i))
-                             in [3, 5, 7, 11, 13, 17, 19, 23]])
+primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37,
+          41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+r = [i for i in range(1, 100) if (MAX % (MAX // i))
+     in primes]
+
+STEP = MAX // random.choice(r)
 
 
 def nextId():
@@ -24,12 +28,12 @@ def nextId():
     return value
 
 
-def baseN(num, b, numerals):  # decimal num into custom base integer
-    return ((num == 0) and numerals[0]) or (baseN(num // b, b, numerals).lstrip(numerals[0]) + numerals[num % b])
+def baseN(num, numerals):  # decimal num into custom base integer
+    return ((num == 0) and numerals[0]) or (baseN(num // len(numerals), numerals).lstrip(numerals[0]) + numerals[num % len(numerals)])
 
 
 def paddedBaseN(num, pad, numerals):  # right padded custom integer
-    return str(baseN(num, len(numerals), numerals)).rjust(pad, numerals[0])
+    return str(baseN(num, numerals)).rjust(pad, numerals[0])
 
 
 class Robot(object):
@@ -47,12 +51,13 @@ class Robot(object):
 
 
 def main():
+    print(paddedBaseN(30, 2, "ABCD"))
     # check if all robots can be created
-    total = len(set([nextId() for _ in range(MAX)]))
-    assert(
-        total == MAX), f":O collision happened {total} / {MAX}"
-    # randomness sample
-    print([Robot().name for _ in range(100)])
+    # total = len(set([nextId() for _ in range(MAX)]))
+    # assert(
+    #     total == MAX), f":O collision happened {total} / {MAX}"
+    # # randomness sample
+    # print([Robot().name for _ in range(100)])
 
 
 if __name__ == '__main__':
