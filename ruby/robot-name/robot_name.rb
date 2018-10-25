@@ -15,7 +15,7 @@ MAX = CONFIG
       .map { |_k, val| val[:symbols].length**val[:size] }
       .inject(:*)
 
-# LPRNG (Lame Pseudo Random Number Generator)
+# LPRNG (Lame Pseudo Random Number Generator) :|
 class LPRNG
   attr_reader :step, :current
 
@@ -62,6 +62,7 @@ end
 # convert an integer to the robot name format
 class NameGenerator
   attr_reader :alpha_conv, :digit_conv, :split
+
   def initialize
     digit_conf, alpha_conf = CONFIG.values_at(:digits, :alphas)
     @alpha_convert = IntegerConverter.new(alpha_conf)
@@ -78,6 +79,7 @@ class NameGenerator
   end
 end
 
+# generators
 RNG = LPRNG.new
 NAMEGEN = NameGenerator.new
 
@@ -91,11 +93,6 @@ class Robot
   alias reset set_name
   alias initialize set_name
 
-  # no need of this with my implementation
+  # no need for this with this implementation
   def self.forget; end
 end
-
-names = []
-MAX.times { |i|
-  names = Robot.new.name
-}
