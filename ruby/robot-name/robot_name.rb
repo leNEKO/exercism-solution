@@ -37,46 +37,56 @@ class LPRNG
   end
 end
 
-RNG = LPRNG.new
+# custom base and symbols integer converter
+class IntegerConverter
+  attr_reader :symbols, :size, :len
 
-# convert an integer to the robot name format
-class NameGenerator
-  def self.get_name(integer)
-    alpha_conf = CONFIG[:alphas]
-    digit_conf = CONFIG[:digits]
-
-    alpha, digit = integer.divmod(
-      digit_conf[:symbols].length**digit_conf[:size]
-    )
-
-    [
-      padded_base_n(alpha, alpha_conf),
-      padded_base_n(digit, digit_conf)
-    ].join
+  def initialize(conf)
+    @symbols, @size = conf.values_at(:symbols, :size)
+    @len = @symbols.length
   end
 
   # recursive decimal integer to custom base and symbols integer
-  def self.base_n(integer, symbols)
-    q, r = integer.divmod(symbols.length)
-    (
-      integer.zero? && ''
-    ) ||
-      base_n(q, symbols) + symbols[r]
+  def convert(integer)
+    q, r = integer.divmod(@len)
+    (integer.zero? && '') ||
+      convert(q) + @symbols[r]
   end
 
   # right padded custom integer
-  def self.padded_base_n(integer, conf)
-    symbols, size = conf.values_at(:symbols, :size)
-    base_n(integer, symbols).rjust(size, symbols[0])
+  def padded(integer)
+    convert(integer).rjust(@size, @symbols[0])
   end
 end
+
+# convert an integer to the robot name format
+class NameGenerator
+  attr_reader :alpha_conv, :digit_conv, :split
+  def initialize
+    digit_conf, alpha_conf = CONFIG.values_at(:digits, :alphas)
+    @alpha_convert = IntegerConverter.new(alpha_conf)
+    @digit_convert = IntegerConverter.new(digit_conf)
+    @split = digit_conf[:symbols].length**digit_conf[:size]
+  end
+
+  def get(integer)
+    alpha, digit = integer.divmod(@split)
+    [
+      @alpha_convert.padded(alpha),
+      @digit_convert.padded(digit)
+    ].join
+  end
+end
+
+RNG = LPRNG.new
+NAMEGEN = NameGenerator.new
 
 # here is my robot
 class Robot
   attr_reader :name
 
   def set_name
-    @name = NameGenerator.get_name(RNG.next)
+    @name = NAMEGEN.get(RNG.next)
   end
   alias reset set_name
   alias initialize set_name
@@ -84,3 +94,8 @@ class Robot
   # no need of this with my implementation
   def self.forget; end
 end
+
+names = []
+MAX.times { |i|
+  names = Robot.new.name
+}
