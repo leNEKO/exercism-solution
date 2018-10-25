@@ -55,40 +55,32 @@ class NameGenerator
     ].join
   end
 
-  # decimal num into custom base integer
-  def self.base_n(integer, symbols, symbols_length)
+  # recursive decimal integer to custom base and symbols integer
+  def self.base_n(integer, symbols)
+    q, r = integer.divmod(symbols.length)
     (
-      integer.zero? && symbols[0]
+      integer.zero? && ''
     ) ||
-      base_n(integer / symbols_length, symbols, symbols_length) +
-        symbols[integer % symbols_length]
+      base_n(q, symbols) + symbols[r]
   end
 
   # right padded custom integer
   def self.padded_base_n(integer, conf)
     symbols, size = conf.values_at(:symbols, :size)
-    base_n(integer, symbols, symbols.length)[1, size]
-      .rjust(size, symbols[0])
+    base_n(integer, symbols).rjust(size, symbols[0])
   end
 end
 
-# Here is my robot
+# here is my robot
 class Robot
   attr_reader :name
-
-  def initialize
-    set_name
-  end
-
-  def reset
-    set_name
-  end
-
-  def self.forget
-    @name = nil
-  end
 
   def set_name
     @name = NameGenerator.get_name(RNG.next)
   end
+  alias reset set_name
+  alias initialize set_name
+
+  # no need of this with my implementation
+  def self.forget; end
 end
