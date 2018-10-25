@@ -39,6 +39,39 @@ end
 
 RNG = LPRNG.new
 
+# convert an integer to the robot name format
+class NameGenerator
+  def self.get_name(integer)
+    alpha_conf = CONFIG[:alphas]
+    digit_conf = CONFIG[:digits]
+
+    alpha, digit = integer.divmod(
+      digit_conf[:symbols].length**digit_conf[:size]
+    )
+
+    [
+      padded_base_n(alpha, alpha_conf),
+      padded_base_n(digit, digit_conf)
+    ].join
+  end
+
+  # decimal num into custom base integer
+  def self.base_n(integer, symbols, symbols_length)
+    (
+      integer.zero? && symbols[0]
+    ) ||
+      base_n(integer / symbols_length, symbols, symbols_length) +
+        symbols[integer % symbols_length]
+  end
+
+  # right padded custom integer
+  def self.padded_base_n(integer, conf)
+    symbols, size = conf.values_at(:symbols, :size)
+    base_n(integer, symbols, symbols.length)[1, size]
+      .rjust(size, symbols[0])
+  end
+end
+
 # Here is my robot
 class Robot
   attr_reader :name
@@ -55,34 +88,7 @@ class Robot
     @name = nil
   end
 
-  # build a name
   def set_name
-    alpha_conf = CONFIG[:alphas]
-    digit_conf = CONFIG[:digits]
-
-    alpha, digit = RNG.next.divmod(
-      digit_conf[:symbols].length**digit_conf[:size]
-    )
-
-    @name = [
-      padded_base_n(alpha, alpha_conf),
-      padded_base_n(digit, digit_conf)
-    ].join
-  end
-
-  # decimal num into custom base integer
-  def base_n(integer, symbols, symbols_length)
-    (
-      integer.zero? && symbols[0]
-    ) ||
-      base_n(integer / symbols_length, symbols, symbols_length) +
-        symbols[integer % symbols_length]
-  end
-
-  # right padded custom integer
-  def padded_base_n(integer, conf)
-    symbols, size = conf.values_at(:symbols, :size)
-    base_n(integer, symbols, symbols.length)[1, size]
-      .rjust(size, symbols[0])
+    @name = NameGenerator.get_name(RNG.next)
   end
 end
