@@ -39,10 +39,8 @@ end
 
 # custom base and symbols integer converter
 class IntegerConverter
-  attr_reader :symbols, :size, :len
-
   def initialize(conf)
-    @symbols, @size = conf.values_at(:symbols, :size)
+    @symbols, @size = conf.map { |_, v| v }
     @len = @symbols.length
   end
 
@@ -61,13 +59,11 @@ end
 
 # convert an integer to the robot name format
 class NameGenerator
-  attr_reader :alpha_conv, :digit_conv, :split
-
   def initialize
-    digit_conf, alpha_conf = CONFIG.values_at(:digits, :alphas)
-    @alpha_convert = IntegerConverter.new(alpha_conf)
-    @digit_convert = IntegerConverter.new(digit_conf)
-    @split = digit_conf[:symbols].length**digit_conf[:size]
+    @alpha_convert, @digit_convert = CONFIG.map do |_, conf|
+      IntegerConverter.new(conf)
+    end
+    @split = CONFIG[:digits][:symbols].length**CONFIG[:digits][:size]
   end
 
   def get(integer)
