@@ -48,17 +48,3 @@ class Robot(object):
 
     def reset(self):
         self.setName()
-
-
-def main():
-    print(paddedBaseN(30, 2, "ABCD"))
-    # check if all robots can be created
-    # total = len(set([nextId() for _ in range(MAX)]))
-    # assert(
-    #     total == MAX), f":O collision happened {total} / {MAX}"
-    # # randomness sample
-    # print([Robot().name for _ in range(100)])
-
-
-if __name__ == '__main__':
-    main()
