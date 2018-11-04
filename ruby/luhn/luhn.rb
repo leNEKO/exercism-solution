@@ -1,21 +1,29 @@
 # Luhn: checksum
 module Luhn
   def self.valid?(string)
-    # check for invalid characters
-    return false unless string.scan(/[^[:space:][:digit:]]/).empty?
+    # validate characters
+    return false if string.scan(/[^[:space:][:digit:]]/).any?
 
-    digits = string.scan(/[[:digit:]]/).reverse
+    digits = normalize(string)
+
+    # validate length
     return false if digits.length < 2
 
-    checksum = digits.map.with_index.sum do |item, index|
-      value = item.to_i
-      if index.odd?
-        (value * 2).divmod(10).sum
-      else
-        value
-      end
-    end
+    # validate cheksum
+    (checksum(digits) % 10).zero?
+  end
 
-    (checksum % 10).zero?
+  def self.checksum(digits)
+    digits.map.with_index.sum { |data| digit_value(*data) }
+  end
+
+  # compute digit value according to its index
+  def self.digit_value(digit, index)
+    index.odd? ? (digit * 2).divmod(10).sum : digit
+  end
+
+  # convert string to a reversed integers array
+  def self.normalize(string)
+    string.scan(/[[:digit:]]/).map(&:to_i).reverse
   end
 end
