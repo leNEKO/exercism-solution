@@ -1,6 +1,6 @@
-use std::cmp;
 use std::fmt;
 
+#[derive(PartialEq, Debug)]
 pub struct Clock {
     minutes: i32,
 }
@@ -24,23 +24,7 @@ impl Clock {
     }
 }
 
-impl cmp::PartialEq for Clock {
-    fn eq(&self, other: &Clock) -> bool {
-        self.minutes == other.minutes
-    }
-}
-
-// Well i am not sure about these two last
 impl fmt::Display for Clock {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let hours = self.minutes / Self::HOUR;
-        let minutes = self.minutes % Self::HOUR;
-        write!(f, "{:02}:{:02}", hours, minutes)
-    }
-}
-
-// didn't really understood why i needed to implement this
-impl fmt::Debug for Clock {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let hours = self.minutes / Self::HOUR;
         let minutes = self.minutes % Self::HOUR;

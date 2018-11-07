@@ -36,13 +36,13 @@ fn test_hour_rolls_over_continuously() {
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn test_sixty_minutes_is_next_hour() {
     assert_eq!(Clock::new(1, 60).to_string(), "02:00");
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn test_minutes_roll_over() {
     assert_eq!(Clock::new(0, 160).to_string(), "02:40");
 }
@@ -108,7 +108,7 @@ fn test_negative_minutes_roll_over_continuously() {
 }
 
 #[test]
-#[ignore]
+// #[ignore]
 fn test_negative_hour_and_minutes_both_roll_over() {
     assert_eq!(Clock::new(-25, -160).to_string(), "20:20");
 }
