@@ -120,4 +120,8 @@ users/
 **/bak
 
 # exercism data
-**/.exercism/metadata.json
+**/.exercism
+
+# node modules
+
+*node_modules

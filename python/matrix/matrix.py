@@ -1,16 +1,18 @@
+from typing import List
+
 class Matrix(object):
-    def __init__(self, matrix_string):
-        self.rows = [[int(i) for i in row_str.split(" ")]
-                     for row_str in matrix_string.split("\n")]
+    def __init__(self, input: str):
+        self.rows: List[List[int]] = [
+            [int(i) for i in input_row.split(' ')]
+            for input_row in input.split('\n')
+        ]
+        self.columns: List[List[int]] = [
+            list(column)
+            for column in zip(*self.rows)
+        ]
 
-        self.columns = [[0 for _ in self.rows]
-                        for _ in self.rows[0]]  # init list
-        for y, row in enumerate(self.rows):
-            for x, val in enumerate(row):
-                self.columns[x][y] = val  # x,y <- y,x
+    def row(self, index: int) -> List[int]:
+        return self.rows[index-1]
 
-    def row(self, index):
-        return self.rows[index]
-
-    def column(self, index):
-        return self.columns[index]
+    def column(self, index: int) -> List[int]:
+        return self.columns[index-1]
